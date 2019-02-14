@@ -5,27 +5,37 @@ import jwt from 'jsonwebtoken';
 import moment from 'moment';
 
 module.exports = (passport) => {
-  passport.use(new Strategy({
+  passport.use('token', new Strategy({
     usernameField: 'email',     // req.body.email
     passwordField: 'password',  // req.body.password
-  }, async (email, password, done) => {
+  }, async (sendedEmail, sendedPassword, done) => {
     try {
-      const exUser = await User.find({ where: { email }});
+      const { TOKEN_SECRET, TOKEN_ISSUER, TOKEN_AUDIENCE } = process.env;
+      const exUser = await User.findOne({ where: { email: sendedEmail }});
+
       if (exUser) {
         // 비밀번호 검사
-        const result = await bcrypt.compare(password, exUser.password);
+        const { id, email, nick, password } = exUser;
+        const result = await bcrypt.compare(sendedPassword, password);
         if (result) {
-          done(null, { accessToken });
+          // 인증 성공 - 토큰 발행
+          const accessToken = await jwt.sign({
+            user: exUser
+          }, TOKEN_SECRET, {
+            issuer: TOKEN_ISSUER,
+            audience: TOKEN_AUDIENCE,
+          });
+          done(null, { authenticated: true, id, email, nick, accessToken });
         } else {
-          done(null, false, { message: '회원 정보 또는 비밀번호가 일치하지 않습니다.' });
+          // 비밀번호 일치하지 않음
+          done(null, { authenticated: false });
         }
       } else {
-        done(null, false, { message: '회원 정보 또는 비밀번호가 일치하지 않습니다.' });
+        // 이메일 존재하지 않음
+        done(null, { authenticated: false });
       }
-
     } catch (error) {
-      console.log('localStrategy Error');
-      done(error);
+      done(error)
     }
   }));
 };

@@ -18,8 +18,12 @@ db.User.hasMany(db.Twit);
 db.Twit.belongsTo(db.User);
 
 // 유저 - 트윗
-db.User.belongsToMany(db.Twit, { through: 'PostHashtag' });
-db.Twit.belongsToMany(db.User, { through: 'PostHashtag' });
+db.User.belongsToMany(db.Twit, { through: 'UserTwit' });
+db.Twit.belongsToMany(db.User, { through: 'UserTwit' });
+
+// 트윗 - 해시태그
+db.Twit.belongsToMany(db.Hashtag, { through: 'TwitHashtag' });
+db.Hashtag.belongsToMany(db.Twit, { through: 'TwitHashtag' });
 
 // 팔로잉
 db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followers', foreignKey: 'followingId' });

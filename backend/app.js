@@ -13,9 +13,9 @@ import router from './routes';
 import { sequelize } from './models';
 import passportConfig from './passport';
 
+dotenv.config();
 passportConfig(passport);
 sequelize.sync({ force: false });
-dotenv.config();
 
 const app = express();
 const { COOKIE_SECRET, SESSION_SECRET, PORT, NODE_ENV } = process.env;
@@ -46,6 +46,3 @@ app.use(router);
 app.listen(PORT, () => {
   console.log(`Listening on: http://localhost:${PORT}`)
 });
-
-import moment from 'moment';
-console.log(moment().add(2, 'hours').toString())

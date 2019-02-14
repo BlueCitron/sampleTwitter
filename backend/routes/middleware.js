@@ -1,18 +1,22 @@
-export function isLoggedIn (req, res, next) {
-  console.log('req.isAuthenticated() : ', req.isAuthenticated())
-  console.log('User : ', req.user)
-  console.log('Session : ', req.session)
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    res.status(403).json({ message: '로그인 필요' });
-  }
-}
+import jwt from 'jsonwebtoken';
 
-export function isNotLoggedIn (req, res, next) {
-  if (!req.isAuthenticated()) {
-    next();
+export async function authenticateByToken (req, res, next) {
+  const accessToken = req.body.accessToken || req.query.accessToken;
+  if (accessToken) {
+    try {
+      const user = jwt.verify(accessToken, process.env.TOKEN_SECRET)
+      req.user = user.user;
+      next();
+    } catch (error) {
+      res.status(403).json({
+        success: false,
+        message: 'Invalid accessToken',
+      });
+    }
   } else {
-    res.status(403).json({ message: '비로그인 사용자 전용' });
+    res.status(403).json({
+      success: false,
+      message: 'Require an accessToken',
+    });
   }
 }

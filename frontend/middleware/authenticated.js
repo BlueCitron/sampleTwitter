@@ -1,7 +1,7 @@
 export default function ({ store, redirect }) {
   // 사용자가 인증을 하지 않은 경우.
-  if (!store.state.authenticated) {
-    console.log('Middleware UnAuthenticated')
+  if (!store.state.accessToken) {
+    console.log('UnAuthenticated. Push to Login page.')
     return redirect('/login')
   }
 }

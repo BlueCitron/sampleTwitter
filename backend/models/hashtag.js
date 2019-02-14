@@ -1,10 +1,14 @@
 module.exports = (sequelize, DataTypes) => (
   sequelize.define('hashtag', {
-    title: {
-      type: DataTypes.STRING(15),
+    hash: {
+      type: DataTypes.STRING(50),
       allowNull: false,
       unique: true,
     },
+    content: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+    }
   }, {
     timestamps: true,
     paranoid: true,

@@ -29,9 +29,7 @@ export default {
   }),
 
   created () {
-    if (!this.$store.state.authenticated) {
-      this.$route.push('/login')
-    }
+
   }
 }
 </script>

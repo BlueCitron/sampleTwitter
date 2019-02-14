@@ -10,10 +10,10 @@ export function logout () {
   return axios.get(`${BASE_URL}/auth/logout`)
 }
 
-export function fetch_twits () {
-  return axios.get(`${BASE_URL}/twit`)
+export function fetch_twits ({ accessToken }) {
+  return axios.get(`${BASE_URL}/twit?accessToken=${accessToken}`)
 }
 
-export function post_twit ({ content }) {
-  return axios.post(`${BASE_URL}/twit`, { content })
+export function post_twit ({ accessToken, content }) {
+  return axios.post(`${BASE_URL}/twit`, { accessToken, content })
 }

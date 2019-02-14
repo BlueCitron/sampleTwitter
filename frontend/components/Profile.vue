@@ -19,7 +19,7 @@
             <div> 1,243,102 </div>
           </v-flex>
           <v-flex class="text-md-center font-weight-bold">
-            <div class="font-weight-bold subheading">팔로워</div>
+            <div class="font-weight-bold subheading">팔로잉</div>
             <div> 38 </div>
           </v-flex>
         </v-layout>
@@ -73,19 +73,19 @@ export default {
   },
 
   methods: {
-    post_twit () {
-      this.$store.dispatch('POST_TWIT', { content: this.newTwit })
+    async post_twit () {
+      if (this.newTwit.length > 140) {
+        alert('140자 이하로만 가능합니다.')
+      } else {
+        await this.$store.dispatch('POST_TWIT', { content: this.newTwit })
+        this.dialog = false
+        this.newTwit = ''
+        this.$store.dispatch('FETCH_TWITS')
+      }
     },
     logout () {
-      const { dispatch, commit } = this.$store
-      dispatch('LOGOUT')
-        .then(response => {
-          const { data } = response
-          if (data.success) {
-            commit ('SET_USER', {})
-            this.$router.push('/login')
-          }
-        })
+      this.$store.dispatch('LOGOUT')
+      this.$router.push('/login')
     }
   }
 }

@@ -13,6 +13,7 @@
     "axios": "^0.18.0",
     "material-design-icons-iconfont": "^4.0.4",
     "nuxt": "^2.4.3",
+    "time-ago": "^0.2.1",
     "vuetify": "^1.5.0"
   }
 }

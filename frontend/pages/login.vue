@@ -47,17 +47,18 @@ export default {
       const { email, password } = this
       const { dispatch, commit } = this.$store
       dispatch('LOGIN', { email, password })
-        .then(response => {
-          const { data } = response
-          if (data.success) {
-            commit ('SET_USER', data.user)
+        .then(({ data }) => {
+          const { success } = data
+          if (success) {
+            const { id, email, nick, accessToken } = data
+            commit ('SET_USER', { id, email, nick })
+            commit ('SET_ACCESS_TOKEN', accessToken)
             this.$router.push('/')
           }
           this.$router.push('/login')
         })
     },
-    
-  }
+  },
 }
 </script>
 <style scoped>

@@ -5,7 +5,7 @@ const store = () => new Vuex.Store({
 
   state: {
     user: {},
-    authenticated: false,
+    accessToken: '',
     twits: [],
   },
 
@@ -18,14 +18,18 @@ const store = () => new Vuex.Store({
       return login({ email, password })
     },
     LOGOUT ({ commit }) {
-      return logout()
+      commit('SET_USER', {})
+      commit('SET_ACCESS_TOKEN', '')
     },
-    async FETCH_TWITS ({ commit }) {
-      const twits = await fetch_twits()
-      console.log('FETCH_TWITS : ', twits)
+    async FETCH_TWITS ({ commit, state }) {
+      const { accessToken } = state
+      const { data } = await fetch_twits({ accessToken })
+      console.log('FETCH_TWITS : ', data.data)
+      commit('SET_TWITS', data.data)
     },
-    async POST_TWIT ({ content }) {
-      const result = await post_twit({ content })
+    async POST_TWIT ({ commit, state }, { content }) {
+      const { accessToken } = state
+      const result = await post_twit({ accessToken, content })
       console.log('POST_TWIT : ', result)
     },
   },
@@ -33,7 +37,9 @@ const store = () => new Vuex.Store({
   mutations: {
     SET_USER (state, user) {
       state.user = user
-      state.authenticated = user === {} ? false : true
+    },
+    SET_ACCESS_TOKEN (state, token) {
+      state.accessToken = token
     },
     SET_TWITS (state, twits) {
       state.twits = twits
