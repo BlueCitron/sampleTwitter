@@ -11,12 +11,15 @@
           <v-text-field
           v-model="email"
           label="Username"
+          color="indigo"
           placeholder="Username"
           ></v-text-field>
           <v-text-field
           v-model="password"
           type="password"
           label="Password"
+          color="indigo"
+          @keyup.enter="login()"
           placeholder="Password"
           ></v-text-field>
         </v-card-text>
@@ -50,8 +53,8 @@ export default {
         .then(({ data }) => {
           const { success } = data
           if (success) {
-            const { id, email, nick, accessToken } = data
-            commit ('SET_USER', { id, email, nick })
+            const { user, accessToken } = data
+            commit ('SET_USER', user)
             commit ('SET_ACCESS_TOKEN', accessToken)
             this.$router.push('/')
           }
@@ -63,6 +66,6 @@ export default {
 </script>
 <style scoped>
 .login-form {
-  opacity: 1;
+  opacity: 0.85;
 }
 </style>

@@ -2,10 +2,13 @@ import { Router } from 'express';
 
 import authRouter from './auth';
 import twitRouter from './twit';
+import userRouter from './user';
+
 const router = Router();
 
 router.use('/auth', authRouter);
 router.use('/twit', twitRouter);
+router.use('/user', userRouter);
 
 const notFoundHandler = (req, res, next) => {
   res.status(404).json({

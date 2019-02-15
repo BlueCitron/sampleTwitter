@@ -19,24 +19,12 @@ sequelize.sync({ force: false });
 
 const app = express();
 const { COOKIE_SECRET, SESSION_SECRET, PORT, NODE_ENV } = process.env;
-const RedisStore = connectRedis(session);
 
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(COOKIE_SECRET));
-// app.use(session({
-//   secret: SESSION_SECRET,
-//   resave: false,
-//   saveUninitialized: false,
-//   cookie: {
-//     httpOnly: true,
-//     secure: false,
-//     maxAge: (4 * 60 * 60 * 1000),
-//    },
-//    store: new RedisStore({ url: 'http://localhost:6379', logErrors: true }),
-// }));
 
 app.use(passport.initialize());
 //app.use(passport.session());

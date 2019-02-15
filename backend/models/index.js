@@ -14,12 +14,9 @@ db.User = require('./user')(sequelize, Sequelize);
 db.Twit = require('./twit')(sequelize, Sequelize);
 db.Hashtag = require('./hashtag')(sequelize, Sequelize);
 
-db.User.hasMany(db.Twit);
-db.Twit.belongsTo(db.User);
-
 // 유저 - 트윗
-db.User.belongsToMany(db.Twit, { through: 'UserTwit' });
-db.Twit.belongsToMany(db.User, { through: 'UserTwit' });
+db.User.hasMany(db.Twit, { as: 'Twits' });
+db.Twit.belongsTo(db.User, );
 
 // 트윗 - 해시태그
 db.Twit.belongsToMany(db.Hashtag, { through: 'TwitHashtag' });
@@ -31,6 +28,18 @@ db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followings', foreignKey
 
 // 좋아요
 db.User.belongsToMany(db.Twit, { through: 'Like' });
-db.Twit.belongsToMany(db.User, { through: 'Like' });
+db.Twit.belongsToMany(db.User, { through: 'Like', as: 'LikeFrom' });
 
+/*
+  정리
+  belongsTo : 해당 테이블에 target의 key값에 해당하는 column 추가
+            : user -> userId / as: 'Writer' -> writerId
+            : twit.addUser() / twit.addWriter
+  belongsToMany : through에 해당하는 테이블에 target과의 관계 추가
+
+
+
+
+
+*/
 module.exports = db;

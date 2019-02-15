@@ -1,9 +1,9 @@
 <template>
-  <v-flex md4 class="mx-5">
+  <v-flex xs3 md3 class="ml-5">
     <v-card height="220" class="profile-card">
 
       <v-card-title>
-        <h3 class="font-weight-bold">{{ this.$store.state.user.nick }}님 안녕하세요</h3>
+        <h3 class="font-weight-bold">{{ user.nick }}님 안녕하세요</h3>
       </v-card-title>
 
       <v-divider></v-divider>
@@ -12,15 +12,15 @@
         <v-layout justify-around>
           <v-flex class="text-md-center font-weight-bold">
             <div class="font-weight-bold subheading">트윗</div>
-            <div> 124 </div>
+            <div> {{ getLength(user.Twits) }} </div>
           </v-flex>
           <v-flex class="text-md-center font-weight-bold">
             <div class="font-weight-bold subheading">팔로워</div>
-            <div> 1,243,102 </div>
+            <div> {{ getLength(user.Followers) }} </div>
           </v-flex>
           <v-flex class="text-md-center font-weight-bold">
             <div class="font-weight-bold subheading">팔로잉</div>
-            <div> 38 </div>
+            <div> {{ getLength(user.Followings) }} </div>
           </v-flex>
         </v-layout>
       </v-card-text>
@@ -69,6 +69,9 @@ export default {
   computed: {
     newTwitLabel () {
       return `${this.newTwit.length}/140`
+    },
+    user () {
+      return this.$store.state.user
     }
   },
 
@@ -81,11 +84,21 @@ export default {
         this.dialog = false
         this.newTwit = ''
         this.$store.dispatch('FETCH_TWITS')
+        this.$store.dispatch('VERIFY')
       }
     },
     logout () {
+      console.log('component/method/before/dispatch')
       this.$store.dispatch('LOGOUT')
+      console.log('component/method/before/push')
       this.$router.push('/login')
+    },
+    getLength (array) {
+      if (array) {
+        return array.length
+      } else {
+        return 0
+      }
     }
   }
 }
