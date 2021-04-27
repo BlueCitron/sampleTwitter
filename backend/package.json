@@ -28,7 +28,7 @@
     "passport-auth-token": "^1.0.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "sequelize": "^4.42.0"
   },
   "babel": {
